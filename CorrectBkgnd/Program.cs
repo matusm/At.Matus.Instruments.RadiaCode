@@ -13,8 +13,10 @@ namespace CorrectBkgnd
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 
             #region file name logic
-            string inFilename = @"C:\Users\User\Documents\RadiaCode\Pechblende_01A.xml";
+            string inFilename = "";
             string outFilename;
+            if (args.Length == 0)
+                ErrorMessage("No filename given.", true);
             if (args.Length >= 1)
             {
                 string path = args[0];
@@ -56,7 +58,8 @@ namespace CorrectBkgnd
             Console.WriteLine($"   Measurement time: {spec.MeasurementTime} s");
             Console.WriteLine($"   Total counts:     {spec.GetTotalCounts()}");
             Console.WriteLine($"   Total rate:       {spec.GetTotalRate():F4} ± {spec.GetTotalSigmaRate():F4} cps");
-
+            Console.WriteLine($"   Maximum value:    {spec.MaximumValue.Rate:F4} cps @ {spec.MaximumValue.Energy:F0} keV");
+   
             Console.WriteLine();
             spec = radiaCode.BackgroundEnergySpectrum;
             if (spec.Type == SpectrumType.Invalid)
@@ -72,6 +75,7 @@ namespace CorrectBkgnd
                 Console.WriteLine($"   Measurement time: {spec.MeasurementTime} s");
                 Console.WriteLine($"   Total counts:     {spec.GetTotalCounts()}");
                 Console.WriteLine($"   Total rate:       {spec.GetTotalRate():F4} ± {spec.GetTotalSigmaRate():F4} cps");
+                Console.WriteLine($"   Maximum value:    {spec.MaximumValue.Rate:F4} cps @ {spec.MaximumValue.Energy:F0} keV");
             }
 
             Console.WriteLine();
@@ -89,6 +93,7 @@ namespace CorrectBkgnd
                 Console.WriteLine($"   Name:             {spec.Name}");
                 Console.WriteLine($"   Comment:          {spec.Comment}");
                 Console.WriteLine($"   Total rate:       {spec.GetTotalRate():F4} ± {spec.GetTotalSigmaRate():F4} cps");
+                Console.WriteLine($"   Maximum value:    {spec.MaximumValue.Rate:F4} cps @ {spec.MaximumValue.Energy:F0} keV");
             }
 
             Console.WriteLine();

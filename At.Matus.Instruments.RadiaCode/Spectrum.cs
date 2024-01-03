@@ -13,6 +13,8 @@ namespace At.Matus.Instruments.RadiaCode
         public int MeasurementTime { get; internal set; } = -1;  // in s
         public EnergyCalibration EnergyCalibration { get; internal set; }
         public DataPoint[] Data { get; internal set; }
+        public DataPoint MaximumValue => GetMaximumValue();
+        public DataPoint MinimumValue => GetMinimumValue();
 
         public bool IsCompatible(Spectrum other)
         {
@@ -132,5 +134,37 @@ namespace At.Matus.Instruments.RadiaCode
         }
 
         public double GetTotalSigmaRate() => GetTotalSigmaRate(0, NumberOfChannels);
+
+        private DataPoint GetMaximumValue()
+        {
+            int maxCounts = int.MinValue;
+            int maxChannel = -1;
+            for (int i = 0; i < Data.Length; i++)
+            {
+                DataPoint p = Data[i];
+                if(p.Counts>maxCounts)
+                {
+                    maxCounts = p.Counts;
+                    maxChannel = i;
+                }
+            }
+            return new DataPoint(Data[maxChannel]);
+        }
+
+        private DataPoint GetMinimumValue()
+        {
+            int minCounts = int.MaxValue;
+            int minChannel = -1;
+            for (int i = 0; i < Data.Length; i++)
+            {
+                DataPoint p = Data[i];
+                if (p.Counts < minCounts)
+                {
+                    minCounts = p.Counts;
+                    minChannel = i;
+                }
+            }
+            return new DataPoint(Data[minChannel]);
+        }
     }
 }
