@@ -137,14 +137,14 @@ namespace At.Matus.Instruments.RadiaCode
 
         private DataPoint GetMaximumValue()
         {
-            int maxCounts = int.MinValue;
+            double maxRate = double.MinValue;
             int maxChannel = -1;
             for (int i = 0; i < Data.Length; i++)
             {
                 DataPoint p = Data[i];
-                if(p.Counts>maxCounts)
+                if (p.Rate > maxRate)
                 {
-                    maxCounts = p.Counts;
+                    maxRate = p.Rate;
                     maxChannel = i;
                 }
             }
@@ -153,14 +153,14 @@ namespace At.Matus.Instruments.RadiaCode
 
         private DataPoint GetMinimumValue()
         {
-            int minCounts = int.MaxValue;
+            double minRate = double.MaxValue;
             int minChannel = -1;
             for (int i = 0; i < Data.Length; i++)
             {
                 DataPoint p = Data[i];
-                if (p.Counts < minCounts)
+                if (p.Rate < minRate)
                 {
-                    minCounts = p.Counts;
+                    minRate = p.Rate;
                     minChannel = i;
                 }
             }

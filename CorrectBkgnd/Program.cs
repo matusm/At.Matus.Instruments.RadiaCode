@@ -96,15 +96,19 @@ namespace CorrectBkgnd
                 Console.WriteLine($"   Maximum value:    {spec.MaximumValue.Rate:F4} cps @ {spec.MaximumValue.Energy:F0} keV");
             }
 
+            #region Calculate normalization factors
+            double factor1 = 1.0 / spec.MaximumValue.Rate;
+            double factor2 = 1.0 / spec.GetTotalRate();
+            #endregion
+
             Console.WriteLine();
             using (StreamWriter sw = new StreamWriter(outFilename, false))
             {
                 Console.WriteLine($"Output to {outFilename}");
-                sw.WriteLine($"channel, energy (keV), rate (cps), rate standard deviation (cps)");
+                sw.WriteLine($"channel, energy (keV), rate (cps), rate standard deviation (cps), normalized rate 1, normalized rate 2");
                 foreach (DataPoint dp in spec.Data)
                 {
-                    sw.WriteLine($"{dp.Channel}, {dp.Energy}, {dp.Rate}, {dp.SigmaRate}");
-                    //Console.WriteLine($"{dp.Channel,4} : {dp.Energy,7:F1} keV   {dp.Rate:F6} ± {dp.SigmaRate:F6}");
+                    sw.WriteLine($"{dp.Channel}, {dp.Energy}, {dp.Rate}, {dp.SigmaRate}, {dp.Rate*factor1}, {dp.Rate * factor2}");
                 }
             }
             Console.WriteLine("done.");
