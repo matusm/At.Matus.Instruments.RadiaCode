@@ -3,36 +3,56 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Xml;
+using CommandLine;
+using CommandLine.Text;
+using System.Collections.Generic;
 
 namespace Rc2Spe
 {
     class Program
     {
+        private static Options options = new Options(); // this must be set in Run()
+
         static void Main(string[] args)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+            Parser parser = new Parser(with => with.HelpWriter = null);
+            ParserResult<Options> parserResult = parser.ParseArguments<Options>(args);
+            parserResult
+                .WithParsed<Options>(options => Run(options))
+                .WithNotParsed(errs => DisplayHelp(parserResult, errs));
+        }
 
+        private static void Run(Options ops)
+        {
+            options = ops;
             #region file name logic
-            string inFilename = "";
+            string inFilename;
             string outFilename;
-            if (args.Length == 0)
-                ErrorMessage("No filename given.", true);
-            if (args.Length >= 1)
+            string path = options.InputPath;
+            if (Path.HasExtension(path))
             {
-                string path = args[0];
-                if (Path.HasExtension(path))
-                {
-                    inFilename = path;
-                }
-                else
-                {
-                    inFilename = Path.ChangeExtension(path, "xml");
-                }
+                inFilename = path;
             }
+            else
+            {
+                inFilename = Path.ChangeExtension(path, "xml");
+            }
+
             string fileDir = Path.GetDirectoryName(inFilename);
             string fileName = Path.GetFileNameWithoutExtension(inFilename);
             string fileExt = Path.GetExtension(inFilename);
             Path.Combine(fileDir, string.Concat(fileName, "_", fileExt));
+
+            if (string.IsNullOrWhiteSpace(options.OutputPath))
+            {
+                outFilename = Path.Combine(fileDir, string.Concat(fileName, ".spe"));
+            }
+            else
+            {
+                outFilename = options.OutputPath;
+            }
             #endregion
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -60,11 +80,9 @@ namespace Rc2Spe
             Console.WriteLine($"   Maximum value:    {spec.MaximumValue.Rate:F4} cps @ {spec.MaximumValue.Energy:F0} keV");
             Console.WriteLine();
 
-            outFilename = Path.Combine(fileDir, string.Concat(fileName, ".spe"));
-
             SbaFormater sba = new SbaFormater(radiaCode);
-            sba.UserComment = "Michael Matus";
-            //sba.SpectrumID = "";
+            if (!string.IsNullOrWhiteSpace(options.UserComment)) sba.UserComment = options.UserComment;
+            if (!string.IsNullOrWhiteSpace(options.SpectrumID)) sba.SpectrumID = options.SpectrumID;
 
             using (StreamWriter sw = new StreamWriter(outFilename, false))
             {
@@ -73,6 +91,20 @@ namespace Rc2Spe
             }
             Console.WriteLine("done.");
 
+        }
+
+        private static void DisplayHelp<T>(ParserResult<T> result, IEnumerable<Error> errs)
+        {
+            HelpText helpText = HelpText.AutoBuild(result, h =>
+            {
+                h.AutoVersion = false;
+                h.AdditionalNewLineAfterOption = false;
+                h.AddPreOptionsLine("\nProgram to convert XML files by RadiaCode to SPE files according to IAEA.");
+                h.AddPreOptionsLine("");
+                h.AddPreOptionsLine($"Usage: {System.Reflection.Assembly.GetExecutingAssembly().GetName().Name} InputPath [OutPath] [options]");
+                return HelpText.DefaultParsingErrorsHandler(result, h);
+            }, e => e);
+            Console.WriteLine(helpText);
         }
 
         private static void ErrorMessage(string message, bool exit)
