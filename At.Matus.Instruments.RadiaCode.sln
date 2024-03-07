@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "At.Matus.Instruments.RadiaC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorrectBkgnd", "CorrectBkgnd\CorrectBkgnd.csproj", "{1EA46571-AF42-455D-9EFE-F50F84F8350B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rc2Spe", "Rc2Spe\Rc2Spe.csproj", "{B17F7F61-1A98-44C7-BC2A-080E125C34F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1EA46571-AF42-455D-9EFE-F50F84F8350B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EA46571-AF42-455D-9EFE-F50F84F8350B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EA46571-AF42-455D-9EFE-F50F84F8350B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B17F7F61-1A98-44C7-BC2A-080E125C34F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B17F7F61-1A98-44C7-BC2A-080E125C34F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B17F7F61-1A98-44C7-BC2A-080E125C34F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B17F7F61-1A98-44C7-BC2A-080E125C34F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
