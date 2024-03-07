@@ -5,12 +5,11 @@ namespace Rc2Spe
 {
     public class Block
     {
+        private const int maxLineLength = 64;
 
         public Block(string name)
         {
-            blockName = $"${name.Trim()}:";
-            CheckLength(blockName);
-            sb.AppendLine(blockName);
+            AddLine($"${name.Trim()}:");
         }
 
         public void AddLine(string line)
@@ -29,9 +28,6 @@ namespace Rc2Spe
             }
         }
 
-        private const int maxLineLength = 64;
-        private string blockName;
-        private StringBuilder sb = new StringBuilder();
-
+        private readonly StringBuilder sb = new StringBuilder();
     }
 }

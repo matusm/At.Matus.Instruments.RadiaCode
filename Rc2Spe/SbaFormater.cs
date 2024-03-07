@@ -6,7 +6,6 @@ namespace Rc2Spe
 {
     public class SbaFormater
     {
-
         public SbaFormater(RadiaCode radiaCode, Spectrum spectrum)
         {
             this.radiaCode = radiaCode;
