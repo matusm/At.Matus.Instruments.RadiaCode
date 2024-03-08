@@ -1,4 +1,5 @@
 ﻿using At.Matus.Instruments.RadiaCode;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace Rc2Spe
         public SbaFormater(RadiaCode radiaCode) : this(radiaCode, radiaCode.EnergySpectrum) { }
 
         public string SpectrumID { get; set; }
-        public string UserComment { get; set; }
+        public List<string> UserComments { get; set; } = new List<string>();
 
         public override string ToString()
         {
@@ -27,7 +28,7 @@ namespace Rc2Spe
         private void InitComments()
         {
             SpectrumID = $"{radiaCode.SampleInfoName} {radiaCode.SampleInfoNote}";
-            UserComment = $"{spectrum.Comment}";
+            UserComments.Add($"{spectrum.Comment}");
         }
 
         private string BlocksToString()
@@ -74,7 +75,10 @@ namespace Rc2Spe
             blckDevice.AddLine($"-"); // hardware version
             blckDevice.AddLine($"-"); // firmware version
             /*******************/
-            blckRem.AddLine(UserComment);
+            foreach (var s in UserComments)
+            {
+                blckRem.AddLine(s);
+            }
             /*******************/
             blckTemp.AddLine($"-"); // detector °C
             blckTemp.AddLine($"-"); // MCA °C

@@ -7,7 +7,7 @@ namespace Rc2Spe
         [Option("comment", Default = "", HelpText = "User comment.")]
         public string UserComment { get; set; }
 
-        [Option("ID", Default = "", HelpText = "Spectrum ID.")]
+        [Option("ID", Default = "", HelpText = "User set spectrum ID.")]
         public string SpectrumID { get; set; }
 
         [Option('q', "quiet", HelpText = "Quiet mode. No screen output (except for errors).")]

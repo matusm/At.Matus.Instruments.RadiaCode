@@ -16,7 +16,6 @@ namespace Rc2Spe
         static void Main(string[] args)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             Parser parser = new Parser(with => with.HelpWriter = null);
             ParserResult<Options> parserResult = parser.ParseArguments<Options>(args);
             parserResult
@@ -27,27 +26,28 @@ namespace Rc2Spe
         private static void Run(Options ops)
         {
             options = ops;
+
             #region file name logic
             string inFilename;
             string outFilename;
-            string path = options.InputPath;
-            if (Path.HasExtension(path))
+            string inPath = options.InputPath;
+            
+            if (Path.HasExtension(inPath))
             {
-                inFilename = path;
+                inFilename = inPath;
             }
             else
             {
-                inFilename = Path.ChangeExtension(path, "xml");
+                inFilename = Path.ChangeExtension(inPath, "xml");
             }
 
             string fileDir = Path.GetDirectoryName(inFilename);
             string fileName = Path.GetFileNameWithoutExtension(inFilename);
             string fileExt = Path.GetExtension(inFilename);
-            Path.Combine(fileDir, string.Concat(fileName, "_", fileExt));
 
             if (string.IsNullOrWhiteSpace(options.OutputPath))
             {
-                outFilename = Path.Combine(fileDir, string.Concat(fileName, ".spe"));
+                outFilename = Path.ChangeExtension(inPath, "spe");
             }
             else
             {
@@ -59,17 +59,17 @@ namespace Rc2Spe
             xmlDoc.Load(inFilename);
             RadiaCode radiaCode = new RadiaCode(xmlDoc);
 
-            Spectrum spec;
-
             Console.WriteLine($"Input file:          {inFilename}");
             Console.WriteLine($"File format version: {radiaCode.FormatVersion}");
             Console.WriteLine($"Sample info (name):  {radiaCode.SampleInfoName}");
             Console.WriteLine($"Sample info (note):  {radiaCode.SampleInfoNote}");
             Console.WriteLine($"Device Type:         {radiaCode.DeviceConfigReference}");
             Console.WriteLine();
-            spec = radiaCode.EnergySpectrum;
+
+            Spectrum spec = radiaCode.EnergySpectrum;
             if (spec.Type == SpectrumType.Invalid)
                 ErrorMessage("No energy spectrum in file.", true);
+
             Console.WriteLine("Energy spectrum");
             Console.WriteLine($"   Name:             {spec.Name}");
             Console.WriteLine($"   Comment:          {spec.Comment}");
@@ -81,8 +81,11 @@ namespace Rc2Spe
             Console.WriteLine();
 
             SbaFormater sba = new SbaFormater(radiaCode);
-            if (!string.IsNullOrWhiteSpace(options.UserComment)) sba.UserComment = options.UserComment;
+
             if (!string.IsNullOrWhiteSpace(options.SpectrumID)) sba.SpectrumID = options.SpectrumID;
+            sba.UserComments.Add($"SourceFile# {inFilename}");
+            sba.UserComments.Add($"FormatVersion# {radiaCode.FormatVersion}");
+            if (!string.IsNullOrWhiteSpace(options.UserComment)) sba.UserComments.Add(options.UserComment);
 
             using (StreamWriter sw = new StreamWriter(outFilename, false))
             {
