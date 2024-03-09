@@ -10,9 +10,6 @@ namespace Rc2Spe
         [Option("ID", Default = "", HelpText = "User set spectrum ID.")]
         public string SpectrumID { get; set; }
 
-        [Option('q', "quiet", HelpText = "Quiet mode. No screen output (except for errors).")]
-        public bool BeQuiet { get; set; }
-
         [Value(0, MetaName = "InputPath", Required = true, HelpText = "Input file-name including path")]
         public string InputPath { get; set; }
 
