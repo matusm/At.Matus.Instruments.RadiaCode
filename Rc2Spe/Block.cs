@@ -12,20 +12,17 @@ namespace Rc2Spe
             AddLine($"${name.Trim()}:");
         }
 
-        public void AddLine(string line)
-        {
-            CheckLength(line);
-            sb.AppendLine(line);
-        }
+        public void AddLine(string line) => sb.AppendLine(CheckLength(line));
 
         public override string ToString() => sb.ToString().TrimEnd('\r', '\n');
 
-        private void CheckLength(string line)
+        private string CheckLength(string line)
         {
             if (line.Length >= maxLineLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(line), $"Line must not exceed {maxLineLength} characters.");
             }
+            return line;
         }
 
         private readonly StringBuilder sb = new StringBuilder();

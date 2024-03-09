@@ -71,9 +71,9 @@ namespace Rc2Spe
             blckApp.AddLine($"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name} {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
             /*******************/
             blckDevice.AddLine($"{radiaCode.DeviceConfigReference}"); // device type
-            blckDevice.AddLine($"{spectrum.SerialNumber}"); // serial number
-            blckDevice.AddLine($"-"); // hardware version
-            blckDevice.AddLine($"-"); // firmware version
+            blckDevice.AddLine($"SN# {spectrum.SerialNumber}"); // serial number
+            blckDevice.AddLine($"HW# -"); // hardware version
+            blckDevice.AddLine($"FW# -"); // firmware version
             /*******************/
             foreach (var s in UserComments)
             {
